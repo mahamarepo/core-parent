@@ -65,7 +65,7 @@ public class QueueUtil {
 
     @Async(AsyncList.QUEUE_POOL)
     public <T> T receiveAndConvert(String queueName) {
-        return template.receiveAndConvert(queueName, new ParameterizedTypeReference<>() {
+        return template.receiveAndConvert(queueName, new ParameterizedTypeReference<T>() {
         });
     }
 
