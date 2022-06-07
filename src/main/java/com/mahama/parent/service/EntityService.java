@@ -1,6 +1,6 @@
 package com.mahama.parent.service;
 
-import com.mahama.common.exception.ApplicationWithoutLoggerException;
+import com.mahama.common.exception.AssertionException;
 import com.mahama.common.utils.Assert;
 import com.mahama.common.utils.ReflectionUtil;
 import com.mahama.parent.utils.RedisHelp;
@@ -43,7 +43,7 @@ public abstract class EntityService<JPA extends JpaRepository<T, ID>, T extends 
         try {
             return (T) entityClass.getDeclaredConstructor().newInstance();
         } catch (Exception err) {
-            throw new ApplicationWithoutLoggerException("查询条件转换失败，请联系管理员");
+            throw new AssertionException("查询条件转换失败，请联系管理员");
         }
     }
 

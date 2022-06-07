@@ -1,11 +1,7 @@
 package com.mahama.parent.service;
 
-import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
-import com.baomidou.mybatisplus.core.conditions.ISqlSegment;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.interfaces.Func;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -16,8 +12,7 @@ import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.mahama.common.exception.ApplicationWithoutLoggerException;
-import com.mahama.common.utils.Lists;
+import com.mahama.common.exception.AssertionException;
 import com.mahama.common.utils.ReflectionUtil;
 import com.mahama.common.utils.StringUtil;
 import com.mahama.parent.utils.BeanUtil;
@@ -107,7 +102,7 @@ public abstract class MapperService<M extends BaseMapper<T>, T> implements IServ
         try {
             return entityClass.getDeclaredConstructor().newInstance();
         } catch (Exception err) {
-            throw new ApplicationWithoutLoggerException("查询条件转换失败，请联系管理员");
+            throw new AssertionException("查询条件转换失败，请联系管理员");
         }
     }
 
