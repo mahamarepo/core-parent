@@ -1,6 +1,6 @@
 package com.mahama.parent.config;
 
-import com.mahama.parent.enumeration.AsyncList;
+import com.mahama.common.enumeration.AsyncList;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;

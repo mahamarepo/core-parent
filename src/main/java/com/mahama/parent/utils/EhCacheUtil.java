@@ -1,6 +1,5 @@
 package com.mahama.parent.utils;
 
-import com.mahama.parent.utils.SpringBeanUtil;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
