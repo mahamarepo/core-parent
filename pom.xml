@@ -6,10 +6,10 @@
     <parent>
         <groupId>com.github.mahamarepo</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.5</version>
     </parent>
     <artifactId>core-parent</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 
     <repositories>
         <repository>

@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.mahama.common.exception.AssertionException;
 import com.mahama.common.utils.ReflectionUtil;
 import com.mahama.common.utils.StringUtil;
-import com.mahama.parent.utils.BeanUtil;
+import com.mahama.common.utils.BeanUtil;
 import com.mahama.parent.utils.RedisHelp;
 import com.mahama.parent.vo.ListData;
 import com.mahama.parent.vo.Order;
