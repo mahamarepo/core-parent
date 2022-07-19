@@ -16,7 +16,8 @@ import com.mahama.common.exception.AssertionException;
 import com.mahama.common.utils.ReflectionUtil;
 import com.mahama.common.utils.StringUtil;
 import com.mahama.common.utils.BeanUtil;
-import com.mahama.parent.utils.RedisHelp;
+import com.mahama.common.utils.RedisHelp;
+import com.mahama.parent.config.RedisConfig;
 import com.mahama.parent.vo.ListData;
 import com.mahama.parent.vo.Order;
 import com.mahama.parent.vo.PageData;
@@ -49,6 +50,8 @@ public abstract class MapperService<M extends BaseMapper<T>, T> implements IServ
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private M mapper;
+    @Autowired
+    private RedisConfig redisConfig;
 
     protected Class<T> entityClass = this.currentModelClass();
 
@@ -340,12 +343,16 @@ public abstract class MapperService<M extends BaseMapper<T>, T> implements IServ
 
     public abstract String redisKeyGroup();
 
+    public boolean redisDisabled() {
+        return redisConfig.isDisabled();
+    }
+
     public String getKeyPrefix() {
         return redisKeyPrefix() + "_" + redisKeyGroup();
     }
 
     public RedisHelp getRedisHelp() {
-        return new RedisHelp(redisTemplate, getKeyPrefix());
+        return new RedisHelp(redisTemplate, getKeyPrefix()).disabled(redisDisabled());
     }
 
     public void clearAllRedis() {
