@@ -2,6 +2,7 @@ package com.mahama.parent.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -145,7 +146,7 @@ public abstract class MapperService<M extends BaseMapper<T>, T> implements IServ
     public <P extends PageData> IPage<T> page(P model, PageBefore<T> before) {
         T entity = newT();
         BeanUtil.copyPropertiesWithOutNull(model, entity);
-        var wrapper = Wrappers.query(entity);
+        QueryWrapper<T> wrapper = Wrappers.query(entity);
         if (StringUtil.isNotNullOrEmpty(model.getSort())) {
             String[] py = model.getSort().split(",");
             List<String> list = new ArrayList<>();
@@ -245,7 +246,7 @@ public abstract class MapperService<M extends BaseMapper<T>, T> implements IServ
 
     @Override
     public boolean removeByIds(Collection<? extends Serializable> idList) {
-        var result = mapper.deleteBatchIds(idList) > 0;
+        boolean result = mapper.deleteBatchIds(idList) > 0;
         if (result)
             idList.forEach(id -> getRedisHelp().deleteIdCacheKey(id));
         return result;
@@ -256,7 +257,7 @@ public abstract class MapperService<M extends BaseMapper<T>, T> implements IServ
      */
     @Override
     public boolean saveBatch(Collection<T> entityList, int batchSize) {
-        var mapperService = this;
+        MapperService<M, T> mapperService = this;
         return getRedisHelp().save(() -> {
             String sqlStatement = mapperService.getSqlStatement(SqlMethod.INSERT_ONE);
             return executeBatch(entityList, batchSize, (sqlSession, entity) -> {
@@ -271,14 +272,14 @@ public abstract class MapperService<M extends BaseMapper<T>, T> implements IServ
     @Override
     public boolean saveOrUpdateBatch(Collection<T> entityList, int batchSize) {
         String keyProperty = getKeyProperty();
-        var result = SqlHelper.saveOrUpdateBatch(entityClass, mapper.getClass(), log, entityList, batchSize, (sqlSession, entity) -> {
+        boolean result = SqlHelper.saveOrUpdateBatch(entityClass, mapper.getClass(), log, entityList, batchSize, (sqlSession, entity) -> {
             Object idVal = getIdVal(entity, keyProperty);
             return StringUtils.checkValNull(idVal) || CollectionUtils.isEmpty(sqlSession.selectList(getSqlStatement(SqlMethod.SELECT_BY_ID), entity));
         }, (sqlSession, entity) -> {
             MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
             param.put("et", entity);
             sqlSession.update(getSqlStatement(SqlMethod.UPDATE_BY_ID), param);
-            var idVal = getIdVal(entity);
+            Object idVal = getIdVal(entity);
             getRedisHelp().deleteIdCacheKey(idVal);
         });
         if (result) {
@@ -293,11 +294,11 @@ public abstract class MapperService<M extends BaseMapper<T>, T> implements IServ
     @Override
     public boolean updateBatchById(Collection<T> entityList, int batchSize) {
         String sqlStatement = getSqlStatement(SqlMethod.UPDATE_BY_ID);
-        var result = executeBatch(entityList, batchSize, (sqlSession, entity) -> {
+        boolean result = executeBatch(entityList, batchSize, (sqlSession, entity) -> {
             MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
             param.put("et", entity);
             sqlSession.update(sqlStatement, param);
-            var idVal = getIdVal(entity);
+            Object idVal = getIdVal(entity);
             getRedisHelp().deleteIdCacheKey(idVal);
         });
         if (result) {

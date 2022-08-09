@@ -7,12 +7,12 @@ import java.io.Serializable;
 
 @Data
 public class PageData implements Serializable {
-    @ApiModelProperty("页数")
+    @ApiModelProperty(value = "页数", example = "1")
     protected Integer page = 1;
-    @ApiModelProperty("每页数量")
+    @ApiModelProperty(value = "每页数量", example = "10")
     protected Integer limit = 10;
     @ApiModelProperty("排序字段")
     protected String sort = "";
-    @ApiModelProperty("排序方式")
+    @ApiModelProperty(value = "排序方式", example = "desc")
     protected Order order = Order.desc;
 }

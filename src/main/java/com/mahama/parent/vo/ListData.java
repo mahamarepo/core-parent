@@ -10,6 +10,6 @@ import java.io.Serializable;
 public class ListData implements Serializable {
     @ApiModelProperty("排序字段")
     protected String sort = "";
-    @ApiModelProperty("排序方式")
+    @ApiModelProperty(value = "排序方式", example = "desc")
     protected Order order = Order.desc;
 }

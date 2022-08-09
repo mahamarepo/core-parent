@@ -52,7 +52,7 @@ public class EntityServiceBase {
             BeanUtil.copyPropertiesWithOutNull(model, entity);
         }
         ExampleMatcher matcher = ExampleMatcher.matching();
-        for (var str : Convert.toStrArray(",", containsColumn)) {
+        for (String str : Convert.toStrArray(",", containsColumn)) {
             matcher = matcher.withMatcher(str, ExampleMatcher.GenericPropertyMatchers.contains());
         }
         matcher.withIgnoreNullValues();
@@ -65,7 +65,7 @@ public class EntityServiceBase {
 
     public List<Sort.Order> getSort(String sortColumn, String order) {
         List<Sort.Order> sort = new ArrayList<>();
-        for (var str : Convert.toStrArray(",", sortColumn)) {
+        for (String str : Convert.toStrArray(",", sortColumn)) {
             sort.add(new Sort.Order(Sort.Direction.fromString(order), str));
         }
         return sort;

@@ -125,8 +125,7 @@ public abstract class EntityService<JPA extends JpaRepository<T, ID>, T extends 
         Iterable<S> result = getRedisHelp().execute(null,
                 () -> getJpaRepository().saveAll(entities));
         if (callback != null)
-            for (var item :
-                    result) {
+            for (S item : result) {
                 callback.deleteOtherKey(item);
             }
     }
@@ -329,11 +328,10 @@ public abstract class EntityService<JPA extends JpaRepository<T, ID>, T extends 
     /**
      * 删除给定的实体。
      */
-    public void deleteAll(Iterable<? extends T> entities) {
+    public <S extends T> void deleteAll(Iterable<S> entities) {
         getRedisHelp().del(() -> getJpaRepository().deleteAll(entities));
         if (callback != null)
-            for (var item :
-                    entities) {
+            for (S item : entities) {
                 callback.deleteOtherKey(item);
             }
     }

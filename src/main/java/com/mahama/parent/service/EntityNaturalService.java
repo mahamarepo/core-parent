@@ -1,5 +1,6 @@
 package com.mahama.parent.service;
 
+import com.mahama.common.utils.RedisHelp;
 import com.mahama.parent.repository.impl.NaturalRepository;
 
 import java.io.Serializable;
@@ -40,7 +41,7 @@ public abstract class EntityNaturalService<NR extends NaturalRepository<T, NID, 
     }
 
     public <S extends T> S updateBySimpleNaturalId(NID naturalId, S entity) {
-        var redisHelp = getRedisHelp();
+        RedisHelp redisHelp = getRedisHelp();
         S result = redisHelp.updateById(null, () -> getJpaRepository().save(entity));
         redisHelp.deleteCacheKey(naturalIdKey + naturalId);
         if (callback != null)
@@ -49,7 +50,7 @@ public abstract class EntityNaturalService<NR extends NaturalRepository<T, NID, 
     }
 
     public <S extends T> S updateBySimpleNaturalId(ID id, NID naturalId, S entity) {
-        var redisHelp = getRedisHelp();
+        RedisHelp redisHelp = getRedisHelp();
         S result = redisHelp.updateById(id, () -> getJpaRepository().save(entity));
         redisHelp.deleteCacheKey(naturalIdKey + naturalId);
         if (callback != null)

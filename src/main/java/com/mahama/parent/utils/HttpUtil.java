@@ -117,7 +117,7 @@ public class HttpUtil {
 
 
     public static <T> String sendPost(String url, T param) {
-        var json = JSON.parseObject(JSON.toJSONString(param));
+        JSONObject json = JSON.parseObject(JSON.toJSONString(param));
         return sendPost(url, json);
     }
 
