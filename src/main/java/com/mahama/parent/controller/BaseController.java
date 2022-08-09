@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.mahama.common.enumeration.MimeType;
 import com.mahama.common.exception.ServiceExceptionEnum;
 import com.mahama.common.utils.Assert;
+import com.mahama.common.utils.ByteUtil;
 import com.mahama.parent.enumeration.BizExceptionEnum;
 import com.mahama.parent.utils.EhCacheUtil;
 import com.mahama.parent.vo.PageJsonRet;
@@ -27,10 +28,7 @@ import java.util.Optional;
 @Slf4j
 public abstract class BaseController {
     public <T> Ret<T> success(Optional<T> data) {
-        if (data.isEmpty()) {
-            return Rets.success(null);
-        }
-        return Rets.success(data.get());
+        return data.map(Rets::success).orElseGet(() -> Rets.success(null));
     }
 
     public <T> Ret<List<T>> success(List<T> data) {
@@ -135,10 +133,15 @@ public abstract class BaseController {
                 mimeType = MimeType.download;
             }
             response.setContentType(mimeType.getValue() + ";charset=utf-8");
-            response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+            response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
             response.setHeader("Pragma", "No-cache");
             OutputStream outputStream = response.getOutputStream();
-            outputStream.write(inputStream.readAllBytes());
+            byte[] all = new byte[0];
+            byte[] read = new byte[1024];
+            while (inputStream.read(read) > -1) {
+                all = ByteUtil.concat(all, read);
+            }
+            outputStream.write(all);
             outputStream.close();
         } catch (IOException e) {
             log.error("下载文件出错：{}", e.getMessage());
