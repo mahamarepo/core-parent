@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.mahama.common.enumeration.MimeType;
 import com.mahama.common.exception.ServiceExceptionEnum;
 import com.mahama.common.utils.Assert;
-import com.mahama.common.utils.ByteUtil;
 import com.mahama.parent.enumeration.BizExceptionEnum;
 import com.mahama.parent.utils.EhCacheUtil;
 import com.mahama.parent.vo.PageJsonRet;
@@ -21,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -136,12 +134,10 @@ public abstract class BaseController {
             response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
             response.setHeader("Pragma", "No-cache");
             OutputStream outputStream = response.getOutputStream();
-            byte[] all = new byte[0];
             byte[] read = new byte[1024];
             while (inputStream.read(read) > -1) {
-                all = ByteUtil.concat(all, read);
+                outputStream.write(read);
             }
-            outputStream.write(all);
             outputStream.close();
         } catch (IOException e) {
             log.error("下载文件出错：{}", e.getMessage());
