@@ -6,12 +6,13 @@ public class Rets implements Serializable {
 
     public static final Integer SUCCESS = 20000;
     public static final Integer FAILURE = 99999;
-    public static  final Integer TOKEN_EXPIRE=50014;
+    public static final Integer TOKEN_EXPIRE = 50014;
 
     public static <T> Ret<T> success(T data) {
         return new Ret<>(Rets.SUCCESS, "成功", data);
     }
-    public static <T> Ret<T> success(T data,String msg) {
+
+    public static <T> Ret<T> success(T data, String msg) {
         return new Ret<>(Rets.SUCCESS, msg, data);
     }
 
@@ -26,7 +27,8 @@ public class Rets implements Serializable {
     public static <T> Ret<T> success() {
         return new Ret<>(Rets.SUCCESS, "成功", null);
     }
-    public static <T> Ret<T> expire(){
-        return new Ret<>(Rets.TOKEN_EXPIRE,"鉴权无效或过期",null);
+
+    public static <T> Ret<T> expire() {
+        return new Ret<>(Rets.TOKEN_EXPIRE, "鉴权无效或过期", null);
     }
 }

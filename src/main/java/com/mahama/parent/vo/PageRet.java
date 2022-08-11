@@ -18,17 +18,20 @@ public class PageRet<T> implements Serializable {
     @ApiModelProperty("每页数量")
     private Integer limit;
 
-    public PageRet() {}
-    public PageRet(T data,Long total,Integer page,Integer limit) {
-        this.total=total;
-        this.page=page;
-        this.limit=limit;
-        this.data=data;
+    public PageRet() {
     }
-    public PageRet(T data,Long total,Long page,Long limit) {
-        this.total=total;
-        this.page=page.intValue();
-        this.limit=limit.intValue();
-        this.data=data;
+
+    public PageRet(T data, Long total, Integer page, Integer limit) {
+        this.total = total;
+        this.page = page;
+        this.limit = limit;
+        this.data = data;
+    }
+
+    public PageRet(T data, Long total, Long page, Long limit) {
+        this.total = total;
+        this.page = page.intValue();
+        this.limit = limit.intValue();
+        this.data = data;
     }
 }

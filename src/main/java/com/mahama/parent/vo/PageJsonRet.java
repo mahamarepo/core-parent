@@ -18,17 +18,20 @@ public class PageJsonRet implements Serializable {
     @ApiModelProperty("每页数量")
     private Integer limit;
 
-    public PageJsonRet() {}
-    public PageJsonRet(Object data, Long total, Integer page, Integer limit) {
-        this.total=total;
-        this.page=page;
-        this.limit=limit;
-        this.data=data;
+    public PageJsonRet() {
     }
+
+    public PageJsonRet(Object data, Long total, Integer page, Integer limit) {
+        this.total = total;
+        this.page = page;
+        this.limit = limit;
+        this.data = data;
+    }
+
     public PageJsonRet(Object data, Long total, Long page, Long limit) {
-        this.total=total;
-        this.page=page.intValue();
-        this.limit=limit.intValue();
-        this.data=data;
+        this.total = total;
+        this.page = page.intValue();
+        this.limit = limit.intValue();
+        this.data = data;
     }
 }
