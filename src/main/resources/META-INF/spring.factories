@@ -1,2 +1,3 @@
 # Auto Configure
 org.springframework.boot.env.EnvironmentPostProcessor=com.mahama.parent.config.CustomEnvironmentPostProcessor
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.github.xiaoymin.knife4j.spring.configuration.Knife4jAutoConfiguration

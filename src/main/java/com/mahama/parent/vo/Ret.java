@@ -1,5 +1,7 @@
 package com.mahama.parent.vo;
 
+import com.alibaba.fastjson.JSONObject;
+import com.mahama.parent.factory.RetCodeFactory;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +12,7 @@ import java.io.Serializable;
 @Setter
 public class Ret<T> implements Serializable {
 
-    @ApiModelProperty("状态码：20000成功，99999失败，50014 token无效或过期")
+    @ApiModelProperty("状态码")
     private Integer code;
     @ApiModelProperty("说明")
     private String msg;
@@ -26,18 +28,12 @@ public class Ret<T> implements Serializable {
         this.code = code;
         this.msg = msg;
         this.data = data;
-        this.success = Rets.SUCCESS.equals(code);
+        this.success = RetCodeFactory.SUCCESS().equals(code);
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{");
-        builder.append("'code':").append(code).append(",");
-        builder.append("'msg':").append(msg).append(",");
-        builder.append("'success':").append(success).append(",");
-        builder.append("}");
-        return builder.toString();
+        return JSONObject.toJSONString(this);
     }
 }
 
