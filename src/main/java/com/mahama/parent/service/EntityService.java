@@ -12,6 +12,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -302,6 +303,29 @@ public abstract class EntityService<JPA extends JpaRepository<T, ID>, T extends 
                 unit
         );
     }
+
+    public List<T> findAllBySpec(Specification<T> spec) {
+        return findAllBySpec(spec, 1, TimeUnit.HOURS);
+    }
+
+    public List<T> findAllBySpec(Specification<T> spec, long timeout, TimeUnit unit) {
+        JpaSpecificationExecutor<T> jpaSpecificationExecutor = (JpaSpecificationExecutor<T>) getJpaRepository();
+        return getRedisHelp().query("list_page_" + spec.hashCode(),
+                () -> jpaSpecificationExecutor.findAll(spec),
+                timeout,
+                unit
+        );
+    }
+
+    public <M extends PageData> Page<T> findAll(Specification<T> spec, M page, long timeout, TimeUnit unit) {
+        JpaSpecificationExecutor<T> jpaSpecificationExecutor = (JpaSpecificationExecutor<T>) getJpaRepository();
+        return getRedisHelp().query("list_page_" + spec.hashCode(),
+                () -> jpaSpecificationExecutor.findAll(spec, getPage(page)),
+                timeout,
+                unit
+        );
+    }
+
 
     /**
      * 根据id删除对应的实体。
