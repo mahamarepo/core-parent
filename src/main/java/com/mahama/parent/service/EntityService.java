@@ -317,7 +317,11 @@ public abstract class EntityService<JPA extends JpaRepository<T, ID>, T extends 
         );
     }
 
-    public <M extends PageData> Page<T> findAll(Specification<T> spec, M page, long timeout, TimeUnit unit) {
+    public <M extends PageData> Page<T> findAllBySpec(Specification<T> spec, M page) {
+        return findAllBySpec(spec, page, 1, TimeUnit.HOURS);
+    }
+
+    public <M extends PageData> Page<T> findAllBySpec(Specification<T> spec, M page, long timeout, TimeUnit unit) {
         JpaSpecificationExecutor<T> jpaSpecificationExecutor = (JpaSpecificationExecutor<T>) getJpaRepository();
         return getRedisHelp().query("list_page_" + spec.hashCode(),
                 () -> jpaSpecificationExecutor.findAll(spec, getPage(page)),
