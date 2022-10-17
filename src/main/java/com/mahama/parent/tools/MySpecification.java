@@ -80,10 +80,21 @@ public class MySpecification<T> implements Specification<T> {
         return this;
     }
 
+    public <V> MySpecification<T> desc(MyFunction<T, V> func) {
+        this.orders.add(MyOrder.desc(func.getFieldName()));
+        return this;
+    }
+
     public MySpecification<T> asc(String property) {
         this.orders.add(MyOrder.asc(property));
         return this;
     }
+
+    public <V> MySpecification<T> asc(MyFunction<T, V> func) {
+        this.orders.add(MyOrder.asc(func.getFieldName()));
+        return this;
+    }
+
 
     public MySpecification<T> order(String property, Sort.Direction direction) {
         this.orders.add(new MyOrder(property, direction));

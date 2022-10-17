@@ -245,6 +245,15 @@ public abstract class EntityService<JPA extends JpaRepository<T, ID>, T extends 
         return findAll(getExample(model, newT(), containsColumn), getPage(model), timeout, unit);
     }
 
+    public <M> long count(M model) {
+        return count(model, 1, TimeUnit.HOURS);
+    }
+
+    public <M> long count(M model, long timeout, TimeUnit unit) {
+        return getRedisHelp().query("list_count_" + model.hashCode(), () -> getJpaRepository().count(getExample(model, newT())), timeout, unit);
+    }
+
+
     public <M extends ListData> List<T> findAllBySpec(M model) {
         return findAllBySpec(model, "");
     }
@@ -325,6 +334,19 @@ public abstract class EntityService<JPA extends JpaRepository<T, ID>, T extends 
         JpaSpecificationExecutor<T> jpaSpecificationExecutor = (JpaSpecificationExecutor<T>) getJpaRepository();
         return getRedisHelp().query("list_page_" + spec.hashCode(),
                 () -> jpaSpecificationExecutor.findAll(spec, getPage(page)),
+                timeout,
+                unit
+        );
+    }
+
+    public long countBySpec(Specification<T> spec) {
+        return countBySpec(spec, 1, TimeUnit.HOURS);
+    }
+
+    public long countBySpec(Specification<T> spec, long timeout, TimeUnit unit) {
+        JpaSpecificationExecutor<T> jpaSpecificationExecutor = (JpaSpecificationExecutor<T>) getJpaRepository();
+        return getRedisHelp().query("list_count_" + spec.hashCode(),
+                () -> jpaSpecificationExecutor.count(spec),
                 timeout,
                 unit
         );

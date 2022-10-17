@@ -123,6 +123,14 @@ public abstract class BaseController {
         return Rets.failure(rc, msg);
     }
 
+    public <T> Ret<T> expire(){
+        return Rets.expire();
+    }
+
+    public <T> Ret<T> expire(String msg){
+        return Rets.expire(msg);
+    }
+
     public void download(HttpServletResponse response, InputStream inputStream, String fileName, MimeType mimeType) {
         Assert.notNull(inputStream, BizExceptionEnum.FILE_READING_ERROR);
         try {

@@ -26,6 +26,10 @@ public class Rets implements Serializable {
     }
 
     public static <T> Ret<T> expire() {
-        return new Ret<>(RetCodeFactory.EXPIRE(), "鉴权无效或过期", null);
+        return expire("鉴权无效或过期");
+    }
+
+    public static <T> Ret<T> expire(String msg) {
+        return new Ret<>(RetCodeFactory.EXPIRE(), msg, null);
     }
 }
