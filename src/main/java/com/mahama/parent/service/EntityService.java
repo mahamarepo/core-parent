@@ -313,6 +313,8 @@ public abstract class EntityService<JPA extends JpaRepository<T, ID>, T extends 
         );
     }
 
+
+
     public List<T> findAllBySpec(Specification<T> spec) {
         return findAllBySpec(spec, 1, TimeUnit.HOURS);
     }
@@ -347,6 +349,19 @@ public abstract class EntityService<JPA extends JpaRepository<T, ID>, T extends 
         JpaSpecificationExecutor<T> jpaSpecificationExecutor = (JpaSpecificationExecutor<T>) getJpaRepository();
         return getRedisHelp().query("list_count_" + spec.hashCode(),
                 () -> jpaSpecificationExecutor.count(spec),
+                timeout,
+                unit
+        );
+    }
+
+    public T findBySpec(Specification<T> spec) {
+        return findBySpec(spec, 1, TimeUnit.HOURS);
+    }
+
+    public T findBySpec(Specification<T> spec, long timeout, TimeUnit unit) {
+        JpaSpecificationExecutor<T> jpaSpecificationExecutor = (JpaSpecificationExecutor<T>) getJpaRepository();
+        return getRedisHelp().query("spec_" + spec.hashCode(),
+                () -> jpaSpecificationExecutor.findOne(spec).orElse(null),
                 timeout,
                 unit
         );
