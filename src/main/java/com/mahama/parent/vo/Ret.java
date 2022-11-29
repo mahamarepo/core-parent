@@ -1,7 +1,7 @@
 package com.mahama.parent.vo;
 
 import com.alibaba.fastjson.JSONObject;
-import com.mahama.parent.factory.RetCodeFactory;
+import com.mahama.parent.factory.RetFactory;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +28,7 @@ public class Ret<T> implements Serializable {
         this.code = code;
         this.msg = msg;
         this.data = data;
-        this.success = RetCodeFactory.SUCCESS().equals(code);
+        this.success = RetFactory.SUCCESS().equals(code);
     }
 
     @Override

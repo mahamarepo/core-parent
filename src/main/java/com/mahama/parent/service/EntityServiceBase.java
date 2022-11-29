@@ -151,9 +151,9 @@ public class EntityServiceBase {
                                 } else {
                                     Date start = DateUtil.parseTime(String.valueOf(value.get(0)));
                                     if (start != null) {
-                                        spec.and(MyQueryParams.le(name, start));
+                                        spec.and(MyQueryParams.ge(name, start));
                                     } else {
-                                        spec.and(MyQueryParams.le(name, value.get(0)));
+                                        spec.and(MyQueryParams.ge(name, value.get(0)));
                                     }
                                 }
                             }
@@ -161,9 +161,9 @@ public class EntityServiceBase {
                                 if (specModel != null) {
                                     if (Date.class.equals(specModel.listItemClass())) {
                                         Date start = DateUtil.parse(String.valueOf(value.get(1)), specModel.datePattern());
-                                        spec.and(MyQueryParams.ge(name, start));
+                                        spec.and(MyQueryParams.le(name, start));
                                     } else {
-                                        spec.and(MyQueryParams.ge(name, value.get(1)));
+                                        spec.and(MyQueryParams.le(name, value.get(1)));
                                     }
                                 } else {
                                     Date start = DateUtil.parseTime(String.valueOf(value.get(1)));
