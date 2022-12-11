@@ -1,6 +1,6 @@
 package com.mahama.parent.tools;
 
-import lombok.Data;
+import com.mahama.common.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,12 +18,6 @@ import java.util.*;
  * MyQueryParams.like("Name",Name)).asc("id"), pr);
  */
 public class MySpecification<T> implements Specification<T> {
-    @Data
-    static class MyQuery {
-        MyQueryType type;
-        Collection<MyQueryParams<?>> list;
-    }
-
     private final List<MyQuery> queryList = new ArrayList<>();
 
     //属性分隔
@@ -123,6 +117,10 @@ public class MySpecification<T> implements Specification<T> {
                 continue;
             }
 
+            if (condition.query != null) {
+                listAnd.add(getPredicates(root, cb, Lists.newArrayList(condition.query)));
+                continue;
+            }
             switch (condition.operator) {
                 case eq:
                     if (condition.value != null) {
@@ -158,7 +156,7 @@ public class MySpecification<T> implements Specification<T> {
                     }
                     break;
                 case in:
-                    listAnd.add(path.in(condition.value));
+                    listAnd.add(path.in(((Collection<?>)condition.value).toArray()));
                     break;
                 case le:
                     if (Number.class.isAssignableFrom(path.getJavaType()) && condition.value instanceof Number) {
@@ -216,7 +214,7 @@ public class MySpecification<T> implements Specification<T> {
                     }
                     break;
                 case notIn:
-                    listAnd.add(path.in(condition.value).not());
+                    listAnd.add(path.in(((Collection<?>)condition.value).toArray()).not());
                     break;
                 case isNull:
                     listAnd.add(path.isNull());
@@ -232,8 +230,12 @@ public class MySpecification<T> implements Specification<T> {
     }
 
     private Predicate getPredicates(Root<T> root, CriteriaBuilder cb) {
+        return getPredicates(root, cb, queryList);
+    }
+
+    private Predicate getPredicates(Root<T> root, CriteriaBuilder cb, List<MyQuery> queries) {
         Predicate restrictions = cb.conjunction();
-        for (MyQuery query : queryList) {
+        for (MyQuery query : queries) {
             switch (query.type) {
                 case AND:
                     restrictions = cb.and(restrictions, cb.and(andPredicates(root, cb, query.getList())));

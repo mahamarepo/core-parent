@@ -1,11 +1,13 @@
 package com.mahama.parent.tools;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 public class MyQueryParams<V> {
     MyOperator operator;
     String property;
     V value;
+    MyQuery query;
 
     public MyQueryParams(String property, MyOperator operator, V value) {
         this.operator = operator;
@@ -16,6 +18,26 @@ public class MyQueryParams<V> {
     public MyQueryParams(String property, MyOperator operator) {
         this.operator = operator;
         this.property = property;
+    }
+
+    public MyQueryParams(MyQueryType myQueryType, MyQueryParams<?>... params) {
+        this.query = new MyQuery();
+        this.query.setType(myQueryType);
+        this.query.setList(Arrays.asList(params));
+    }
+
+    /**
+     * 内嵌and
+     */
+    public static MyQueryParams<?> and(MyQueryParams<?>... value) {
+        return new MyQueryParams<>(MyQueryType.AND, value);
+    }
+
+    /**
+     * 内嵌or
+     */
+    public static MyQueryParams<?> or(MyQueryParams<?>... value) {
+        return new MyQueryParams<>(MyQueryType.OR, value);
     }
 
     /**
@@ -163,28 +185,28 @@ public class MyQueryParams<V> {
     /**
      * 集合中
      */
-    public static <V extends Collection<?>> MyQueryParams<V> in(String property, V value) {
+    public static <V> MyQueryParams<Collection<V>> in(String property, Collection<V> value) {
         return new MyQueryParams<>(property, MyOperator.in, value);
     }
 
     /**
      * 集合中
      */
-    public static <T, V extends Collection<?>> MyQueryParams<V> in(MyFunction<T, V> func, V value) {
+    public static <T, V> MyQueryParams<Collection<V>> in(MyFunction<T, V> func, Collection<V> value) {
         return new MyQueryParams<>(func.getFieldName(), MyOperator.in, value);
     }
 
     /**
      * 不在集合中
      */
-    public static <V extends Collection<?>> MyQueryParams<V> notIn(String property, V value) {
+    public static <V> MyQueryParams<Collection<V>> notIn(String property, Collection<V> value) {
         return new MyQueryParams<>(property, MyOperator.notIn, value);
     }
 
     /**
      * 不在集合中
      */
-    public static <T, V extends Collection<?>> MyQueryParams<V> notIn(MyFunction<T, V> func, V value) {
+    public static <T, V> MyQueryParams<Collection<V>> notIn(MyFunction<T, V> func, Collection<V> value) {
         return new MyQueryParams<>(func.getFieldName(), MyOperator.notIn, value);
     }
 
@@ -198,7 +220,7 @@ public class MyQueryParams<V> {
     /**
      * 是空
      */
-    public static <T,V> MyQueryParams<String> isNull(MyFunction<T, V> func) {
+    public static <T, V> MyQueryParams<String> isNull(MyFunction<T, V> func) {
         return new MyQueryParams<>(func.getFieldName(), MyOperator.isNull);
     }
 
@@ -212,7 +234,7 @@ public class MyQueryParams<V> {
     /**
      * 不是空
      */
-    public static <T,V> MyQueryParams<String> isNotNull(MyFunction<T, V> func) {
+    public static <T, V> MyQueryParams<String> isNotNull(MyFunction<T, V> func) {
         return new MyQueryParams<>(func.getFieldName(), MyOperator.isNotNull);
     }
 }
