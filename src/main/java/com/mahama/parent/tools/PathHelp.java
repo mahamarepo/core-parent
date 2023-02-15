@@ -36,7 +36,7 @@ public class PathHelp {
         if (path.startsWith("http://") || path.startsWith("https://") || savedPath.startsWith("oss:")) {
             return path.replaceFirst("^" + httpPath, "");
         }
-        return path.replaceFirst("^" + savedPath + "/", "");
+        return path.replaceFirst("^" + savedPath + "/", "").replaceFirst("^" + httpPath, "");
     }
 
     public static List<String> cleanPathToSave(List<String> paths) {
@@ -65,6 +65,6 @@ public class PathHelp {
         if (path.startsWith("http://") || path.startsWith("https://")) {
             return path.replaceFirst("^" + StorageTool.getAvatarHttpPath(), "");
         }
-        return path.replaceFirst("^" + StorageTool.getAvatarSavePath() + "/", "");
+        return path.replaceFirst("^" + StorageTool.getAvatarSavePath() + "/", "").replaceFirst("^" + StorageTool.getAvatarHttpPath() + "/", "");
     }
 }
