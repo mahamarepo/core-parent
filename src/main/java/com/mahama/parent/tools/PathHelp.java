@@ -2,7 +2,7 @@ package com.mahama.parent.tools;
 
 
 import com.mahama.common.utils.StringUtil;
-import com.mahama.parent.tools.StorageTool;
+import com.mahama.parent.utils.HttpUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,12 @@ public class PathHelp {
         if (url.startsWith("http://") || url.startsWith("https://")) {
             return url;
         }
-        return StorageTool.getFileHttpPath() + url;
+        String fileHttpPath = StorageTool.getFileHttpPath();
+        if (fileHttpPath.startsWith("http://") || fileHttpPath.startsWith("https://")) {
+            return fileHttpPath + url;
+        }
+        String origin = HttpUtil.getOrigin();
+        return origin + fileHttpPath + url;
     }
 
     public static String[] AddPrePath(String[] urls) {
@@ -30,8 +35,13 @@ public class PathHelp {
         if (StringUtil.isNullOrEmpty(path)) {
             return path;
         }
+        String origin = HttpUtil.getOrigin();
+        if (StringUtil.isNotNullOrEmpty(origin) && path.startsWith(origin)) {
+            path = path.replace(origin, "");
+        }
         String savedPath = StorageTool.getFileSavePath();
         String httpPath = StorageTool.getFileHttpPath();
+
         path = path.replace("\\", "/");
         if (path.startsWith("http://") || path.startsWith("https://") || savedPath.startsWith("oss:")) {
             return path.replaceFirst("^" + httpPath, "");
@@ -54,12 +64,24 @@ public class PathHelp {
         if (url.startsWith("data:")) {
             return url;
         }
-        return StorageTool.getAvatarHttpPath() + url;
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+            return url;
+        }
+        String avatarHttpPath = StorageTool.getAvatarHttpPath();
+        if (avatarHttpPath.startsWith("http://") || avatarHttpPath.startsWith("https://")) {
+            return avatarHttpPath + url;
+        }
+        String origin = HttpUtil.getOrigin();
+        return origin + avatarHttpPath + url;
     }
 
     public static String cleanAvatarPathToSave(String path) {
         if (StringUtil.isNullOrEmpty(path)) {
             return path;
+        }
+        String origin = HttpUtil.getOrigin();
+        if (StringUtil.isNotNullOrEmpty(origin) && path.startsWith(origin)) {
+            path = path.replace(origin, "");
         }
         path = path.replace("\\", "/");
         if (path.startsWith("http://") || path.startsWith("https://")) {

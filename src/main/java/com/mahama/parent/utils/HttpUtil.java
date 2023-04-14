@@ -18,6 +18,7 @@ package com.mahama.parent.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mahama.common.constants.ApiConstants;
+import com.mahama.common.utils.StringUtil;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -56,6 +57,14 @@ public class HttpUtil {
             ip = ApiConstants.IPV4_LOCALHOST;
         }
         return ip;
+    }
+
+    public static String getOrigin() {
+        return getOrigin(getRequest());
+    }
+
+    public static String getOrigin(HttpServletRequest req) {
+        return StringUtil.sNull(req.getHeader("Origin"),"");
     }
 
     /**

@@ -13,7 +13,7 @@ public class StorageTool {
     }
 
     public static String getFileHttpPath() {
-        return CfgUtil.getString("files.download.httpPath", "https://download.com/");
+        return CfgUtil.getString("files.download.httpPath", "/file-api/");
     }
 
     public static String getAvatarSavePath() {
@@ -21,6 +21,6 @@ public class StorageTool {
     }
 
     public static String getAvatarHttpPath() {
-        return CfgUtil.getString("avatar.download.httpPath", "https://download.com/avatar/");
+        return CfgUtil.getString("avatar.download.httpPath", "/file-api/avatar/");
     }
 }
