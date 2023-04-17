@@ -1,6 +1,7 @@
 package com.mahama.parent.tools;
 
 
+import com.mahama.common.utils.CfgUtil;
 import com.mahama.common.utils.StringUtil;
 import com.mahama.parent.utils.HttpUtil;
 
@@ -8,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PathHelp {
+    private static boolean isAddOrigin(){
+        return CfgUtil.getBoolean("download.http.addOrigin", false);
+    }
+
     public static String AddPrePath(String url) {
         if (StringUtil.isNullOrEmpty(url)) {
             return url;
@@ -19,8 +24,11 @@ public class PathHelp {
         if (fileHttpPath.startsWith("http://") || fileHttpPath.startsWith("https://")) {
             return fileHttpPath + url;
         }
-        String origin = HttpUtil.getOrigin();
-        return origin + fileHttpPath + url;
+        if (isAddOrigin()) {
+            return HttpUtil.getOrigin() + fileHttpPath + url;
+        } else {
+            return fileHttpPath + url;
+        }
     }
 
     public static String[] AddPrePath(String[] urls) {
@@ -71,8 +79,11 @@ public class PathHelp {
         if (avatarHttpPath.startsWith("http://") || avatarHttpPath.startsWith("https://")) {
             return avatarHttpPath + url;
         }
-        String origin = HttpUtil.getOrigin();
-        return origin + avatarHttpPath + url;
+        if (isAddOrigin()) {
+            return HttpUtil.getOrigin() + avatarHttpPath + url;
+        } else {
+            return avatarHttpPath + url;
+        }
     }
 
     public static String cleanAvatarPathToSave(String path) {
