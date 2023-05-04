@@ -1,6 +1,5 @@
 package com.mahama.parent.controller;
 
-import com.mahama.parent.controller.BaseController;
 import com.mahama.parent.vo.Ret;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
